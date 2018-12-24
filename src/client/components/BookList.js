@@ -24,7 +24,7 @@ const BookList = () => {
           );
         }}
       </Query>
-      <BookDetails bookId={selectedBook} />
+      { selectedBook && <BookDetails bookId={selectedBook} /> }
     </div>
   );
 };
