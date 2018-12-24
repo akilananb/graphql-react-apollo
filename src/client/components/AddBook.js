@@ -3,7 +3,7 @@ import { Query, Mutation } from 'react-apollo';
 import {
   getAuthorsQuery,
   addBookMutation,
-  getBooksQuery
+  getBooksQuery,
 } from '../queries/queries';
 
 const displayAuthors = (loading, data) => {
@@ -29,7 +29,17 @@ const AddBook = () => {
   const updateState = (e) => {
     setBook({
       ...book,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const updateCache = (cache, { data: { addBook } }) => {
+    const { books } = cache.readQuery({ query: getBooksQuery });
+    cache.writeQuery({
+      query: getBooksQuery,
+      data: {
+        books: books.concat(addBook),
+      },
     });
   };
 
@@ -37,16 +47,14 @@ const AddBook = () => {
     <Query query={getAuthorsQuery}>
       {({ loading, error, data }) => {
         return (
-          <Mutation mutation={addBookMutation}>
-            {(addBook, { mutatedData }) => {
-              
+          <Mutation mutation={addBookMutation} update={updateCache}>
+            {(addBook) => {
               const submitForm = (e) => {
                 e.preventDefault();
                 addBook({
                   variables: {
-                    ...book
-                  },
-                  refetchQueries: [{ query: getBooksQuery }]
+                    ...book,
+                  },  
                 });
               };
 

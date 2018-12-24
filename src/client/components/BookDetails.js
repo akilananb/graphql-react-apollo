@@ -1,8 +1,18 @@
 import React from 'react';
-import { Query } from 'react-apollo';
-import { getBookQuery } from '../queries/queries';
+import { Query, Mutation } from 'react-apollo';
+import { getBookQuery, removeBookMutation, getBooksQuery } from '../queries/queries';
 
-const displayBookDetails = (book) => {
+const updateCache = (cache, { data: { removeBook } }) => {
+  const { books } = cache.readQuery({ query: getBooksQuery });
+  cache.writeQuery({
+    query: getBooksQuery,
+    data: {
+      books: books.filter(books => books.id !== removeBook.id),
+    },
+  });
+};
+
+const displayBookDetails = (book, removeBook) => {
   if (book) {
     return (
       <div>
@@ -15,31 +25,65 @@ const displayBookDetails = (book) => {
             return <li key={item.id}>{item.name}</li>;
           })}
         </ul>
-        <button class="delete-book">
+        <button
+          className="delete-book"
+          type="submit"
+          onClick={() => {
+            removeBook({
+              variables: {
+                id: book.id,
+              },
+            });
+          }}
+        >
           Delete
         </button>
       </div>
     );
-  } else {
-    return <div><h2>No book selected.</h2></div>;
   }
+  return (
+    <div>
+      <h2>No book selected.</h2>
+    </div>
+  );
 };
 
 const BookDetails = (selectedBook) => {
-  console.log(selectedBook.bookId);
-    if (selectedBook) {
-      return (
+  if (selectedBook) {
+    return (
       <div id="book-details">
-        <Query query={getBookQuery} variables={{ id: selectedBook.bookId }} >
+        <Query query={getBookQuery} variables={{ id: selectedBook.bookId }}>
           {({ loading, error, data }) => {
-            if (loading) return <div class='lds-container'><div class="lds-ripple"><div></div><div></div></div></div>;
-            if (error) return <div class='lds-container'>`Error! ${error.message}`</div>;
-            return displayBookDetails(data.book);
+            if (loading) {
+              return (
+                <div className="lds-container">
+                  <div className="lds-ripple">
+                    <div />
+                    <div />
+                  </div>
+                </div>
+              );
+            }
+            if (error) {
+              return (
+                <div className="lds-container">`Error! ${error.message}`</div>
+              );
+            }
+            return (
+              <Mutation mutation={removeBookMutation} key={selectedBook.bookId} update={updateCache}>
+                {(removeBook, { called }) => {
+                  if (called) {
+                    return <div><h2>Selected book has been deleted from the list.</h2></div>;
+                  }
+                  return displayBookDetails(data.book, removeBook);
+                }}
+              </Mutation>
+            );
           }}
         </Query>
       </div>
-      )
-    }
+    );
+  }
 };
 
 export default BookDetails;
