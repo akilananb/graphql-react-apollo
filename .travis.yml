@@ -5,7 +5,15 @@ node_js:
 
 script:
   - npm run build
-  
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: KEY
+  app: graphql-react-apollo
+  on:
+    repo: akilananb/graphql-react-apollo
+
 branches:
   only:
   - master
