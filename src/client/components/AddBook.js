@@ -6,18 +6,14 @@ import {
 } from '../queries/queries';
 import { addBookCache } from '../queries/updateCache';
 
-const displayAuthors = (loading, data) => {
-  if (loading) {
-    return <option disabled>Loading authors...</option>;
-  }
-  return data.authors.map((author) => {
-    return (
+const displayAuthors = (loading, data) => (
+  loading ? <option disabled>Loading authors...</option>
+    : data.authors.map(author => (
       <option value={author.id} key={author.id}>
         {author.name}
       </option>
-    );
-  });
-};
+    ))
+);
 
 const AddBook = () => {
   const [book, setBook] = useState({
