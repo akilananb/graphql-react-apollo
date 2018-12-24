@@ -1,21 +1,52 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "main": "src/server/index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "start": "npm run build && node src/server/index.js",
+    "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
+    "server": "nodemon src/server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Akilan Anbu",
+  "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "apollo-boost": "^0.1.23",
+    "react": "16.7.0-alpha.2",
+    "react-apollo": "^2.3.3",
+    "react-dom": "16.7.0-alpha.2",
+    "react-scripts": "2.1.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphiql": "^0.12.0",
     "graphql": "^14.0.2",
-    "mongoose": "^5.4.0",
-    "nodemon": "^1.18.9"
+    "mongoose": "^5.4.0"
   },
-  "scripts": {
-    "start": "cd client && npx react-scripts start",
-    "client-build": "cd client && npx react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.0",
+    "babel-loader": "^8.0.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "concurrently": "^4.0.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.0.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.17.3",
+    "style-loader": "^0.23.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.3"
   }
 }
