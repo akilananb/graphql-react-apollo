@@ -31,53 +31,57 @@ const AddBook = () => {
 
   return (
     <Query query={getAuthorsQuery}>
-      {({ loading, error, data }) => {
-        return (
-          <Mutation mutation={addBookMutation} update={addBookCache}>
-            {(addBook) => {
-              const submitForm = (e) => {
-                e.preventDefault();
-                addBook({
-                  variables: {
-                    ...book,
-                  },  
-                });
-              };
+      {({ loading, data }) => (
+        <Mutation mutation={addBookMutation} update={addBookCache}>
+          {(addBook) => {
+            const submitForm = (e) => {
+              e.preventDefault();
+              addBook({
+                variables: {
+                  ...book,
+                },
+              });
+            };
 
-              return (
-                <form id="add-book" onSubmit={e => submitForm(e)}>
-                  <div className="field">
-                    <label>Book name:</label>
+            return (
+              <form id="add-book" onSubmit={e => submitForm(e)}>
+                <div className="field">
+                Book name:
+                  <label htmlFor="name">
                     <input
                       type="text"
                       name="name"
                       onChange={e => updateState(e)}
                     />
-                  </div>
+                  </label>
+                </div>
 
-                  <div className="field">
-                    <label>Genre:</label>
+                <div className="field">
+                  <label htmlFor="genre">
+                  Genre:
                     <input
                       type="text"
                       name="genre"
                       onChange={e => updateState(e)}
                     />
-                  </div>
+                  </label>
+                </div>
 
-                  <div className="field">
-                    <label>Author:</label>
+                <div className="field">
+                  <label htmlFor="authorId">
+                    Author:
                     <select name="authorId" onChange={e => updateState(e)}>
                       <option>Select author</option>
                       {displayAuthors(loading, data)}
                     </select>
-                  </div>
-                  <button>+</button>
-                </form>
-              );
-            }}
-          </Mutation>
-        );
-      }}
+                  </label>
+                </div>
+                <button type="button">+</button>
+              </form>
+            );
+          }}
+        </Mutation>
+      )}
     </Query>
   );
 };
