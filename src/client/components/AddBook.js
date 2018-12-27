@@ -46,35 +46,35 @@ const AddBook = () => {
             return (
               <form id="add-book" onSubmit={e => submitForm(e)}>
                 <div className="field">
-                Book name:
                   <label htmlFor="name">
-                    <input
-                      type="text"
-                      name="name"
-                      onChange={e => updateState(e)}
-                    />
+                    Book name:
                   </label>
+                  <input
+                    type="text"
+                    name="name"
+                    onChange={e => updateState(e)}
+                  />
                 </div>
 
                 <div className="field">
                   <label htmlFor="genre">
-                  Genre:
-                    <input
-                      type="text"
-                      name="genre"
-                      onChange={e => updateState(e)}
-                    />
+                    Genre:
                   </label>
+                  <input
+                    type="text"
+                    name="genre"
+                    onChange={e => updateState(e)}
+                  />
                 </div>
 
                 <div className="field">
                   <label htmlFor="authorId">
                     Author:
-                    <select name="authorId" onChange={e => updateState(e)}>
-                      <option>Select author</option>
-                      {displayAuthors(loading, data)}
-                    </select>
                   </label>
+                  <select name="authorId" onChange={e => updateState(e)}>
+                    <option>Select author</option>
+                    {displayAuthors(loading, data)}
+                  </select>
                 </div>
                 <button type="button">+</button>
               </form>
