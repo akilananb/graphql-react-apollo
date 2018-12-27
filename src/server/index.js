@@ -1,21 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const graphqlHTTP = require('express-graphql');
-const schema = require('./schema/schema');
 const mongoose = require('mongoose');
+const schema = require('./schema/schema');
 
 const app = express();
 
 app.use(cors());
 
-const dbString =
-  process.env.NODE && process.env.NODE.indexOf('heroku') !== -1
-    ? process.env.db
-    : '';
+const dbString = process.env.NODE && process.env.NODE.indexOf('heroku') !== -1
+  ? process.env.db
+  : 'mongodb+srv://graphql:T1Vb9N1bQhGmeAVL@cluster0-tgbiz.mongodb.net/test?retryWrites=true';
 
 mongoose.connect(
   dbString,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true },
 );
 
 mongoose.connection.once(
@@ -25,7 +24,7 @@ mongoose.connection.once(
   },
   (error) => {
     console.log('error', error);
-  }
+  },
 );
 
 app.use(express.static('dist'));
@@ -34,8 +33,8 @@ app.use(
   '/graphql',
   graphqlHTTP({
     schema,
-    graphiql: true
-  })
+    graphiql: true,
+  }),
 );
 
 const PORT = process.env.PORT || 4000;
