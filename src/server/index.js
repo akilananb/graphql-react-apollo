@@ -10,7 +10,7 @@ app.use(cors());
 
 const dbString = process.env.NODE && process.env.NODE.indexOf('heroku') !== -1
   ? process.env.db
-  : 'mongodb+srv://graphql:T1Vb9N1bQhGmeAVL@cluster0-tgbiz.mongodb.net/test?retryWrites=true';
+  : '';
 
 mongoose.connect(
   dbString,

@@ -20,9 +20,7 @@ const BookType = new GraphQLObjectType({
     genre: { type: GraphQLString },
     author: {
       type: AuthorType,
-      resolve(parent) {
-        return Author.findById(parent.authorId);
-      },
+      resolve: parent => Author.findById(parent.authorId),
     },
   }),
 });
@@ -35,9 +33,7 @@ const AuthorType = new GraphQLObjectType({
     age: { type: GraphQLInt },
     books: {
       type: new GraphQLList(BookType),
-      resolve(parent) {
-        return Book.find({ authorId: parent.id });
-      },
+      resolve: parent => Book.find({ authorId: parent.id }),
     },
   }),
 });
@@ -48,9 +44,7 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return Book.findById(args.id);
-      },
+      resolve: (parent, args) => Book.findById(args.id),
     },
     author: {
       type: AuthorType,
@@ -61,15 +55,11 @@ const RootQuery = new GraphQLObjectType({
     },
     books: {
       type: new GraphQLList(BookType),
-      resolve() {
-        return Book.find();
-      },
+      resolve: () => Book.find(),
     },
     authors: {
       type: new GraphQLList(AuthorType),
-      resolve() {
-        return Author.find();
-      },
+      resolve: () => Author.find(),
     },
   },
 });
@@ -83,7 +73,7 @@ const Mutation = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString) },
         age: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve(parent, args) {
+      resolve: (parent, args) => {
         const author = new Author({
           ...args,
         });
@@ -97,7 +87,7 @@ const Mutation = new GraphQLObjectType({
         genre: { type: new GraphQLNonNull(GraphQLString) },
         authorId: { type: new GraphQLNonNull(GraphQLID) },
       },
-      resolve(parent, args) {
+      resolve: (parent, args) => {
         if (!args.authorId || args.authorId.length === 0) {
           throw Error('Author ID cannot be empty');
         }
@@ -112,9 +102,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      resolve(parent, args) {
-        return Book.findByIdAndDelete(args.id);
-      },
+      resolve: (parent, args) => Book.findByIdAndDelete(args.id),
     },
   },
 });
